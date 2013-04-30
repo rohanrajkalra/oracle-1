@@ -1,6 +1,6 @@
 Notes for exam 1Z0-047
 ======================
-Joseph HERLANT <herlantj@gmail.com>
+Joseph HERLANT <josephherlant@free.fr>
 v1.0, 2013-02-16 : Creation of the document
 :encoding: UTF-8
 :data-uri:
@@ -45,7 +45,7 @@ After setting a column to unused, you can reuse its name for another column.
 
 `GROUPING` function returns 1 for superaggregated rows.
 
-`TIMESTAMP WITH TIMEZONE`cannot be used as PK, but `TIMESTAMP WITH LOCAL TIMEZONE` can.
+`TIMESTAMP WITH TIMEZONE` cannot be used as PK, but `TIMESTAMP WITH LOCAL TIMEZONE` can.
 
 `SAVEPOINT <savepoint_name>` (no *TO*), but `ROLLBACK TO <savepoint_name>` (here you have a TO)!
 
@@ -65,7 +65,7 @@ FK needs the referenced columns to be constrained by a UNIQUE constraint (no nee
 
 Synonym creation do not require that the target object exists.
 
-Any `ALTER TABLE ... ` will prevent flashback from working.
+Any `ALTER TABLE ...` will prevent flashback from working.
 
 Semijoins stand for `EXISTS` operators.
 

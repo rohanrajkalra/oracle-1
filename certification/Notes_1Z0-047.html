@@ -553,7 +553,7 @@ footnotes: function () {
 <div id="header">
 <h1>Notes for exam 1Z0-047</h1>
 <span id="author">Joseph HERLANT</span><br />
-<span id="email"><tt>&lt;<a href="mailto:herlantj@gmail.com">herlantj@gmail.com</a>&gt;</tt></span><br />
+<span id="email"><tt>&lt;<a href="mailto:josephherlant@free.fr">josephherlant@free.fr</a>&gt;</tt></span><br />
 <span id="revnumber">version 1.0,</span>
 <span id="revdate">2013-02-16</span>
 <br /><span id="revremark">Creation of the document</span>
@@ -650,7 +650,7 @@ MAXVALUE can be set to &lt; 0 as long as MINVALUE &lt; MAXVALUE
 </ul></div>
 <div class="paragraph"><p>After setting a column to unused, you can reuse its name for another column.</p></div>
 <div class="paragraph"><p><tt>GROUPING</tt> function returns 1 for superaggregated rows.</p></div>
-<div class="paragraph"><p><tt>TIMESTAMP WITH TIMEZONE`cannot be used as PK, but `TIMESTAMP WITH LOCAL TIMEZONE</tt> can.</p></div>
+<div class="paragraph"><p><tt>TIMESTAMP WITH TIMEZONE</tt> cannot be used as PK, but <tt>TIMESTAMP WITH LOCAL TIMEZONE</tt> can.</p></div>
 <div class="paragraph"><p><tt>SAVEPOINT &lt;savepoint_name&gt;</tt> (no <strong>TO</strong>), but <tt>ROLLBACK TO &lt;savepoint_name&gt;</tt> (here you have a TO)!</p></div>
 <div class="paragraph"><p>DISTINCT and UNIQUE operators do exactly the same thing in a select clause.</p></div>
 <div class="paragraph"><p>The <tt>PRIOR</tt> is on the side making reference to the parent line.</p></div>
@@ -660,7 +660,7 @@ MAXVALUE can be set to &lt; 0 as long as MINVALUE &lt; MAXVALUE
 <div class="paragraph"><p>To disable PK with FK referencing it, use: <tt>ALTER TABLE &lt;table_name&gt; DISABLE PRIMARY KEY CASCADE;</tt></p></div>
 <div class="paragraph"><p>FK needs the referenced columns to be constrained by a UNIQUE constraint (no need to be a PK).</p></div>
 <div class="paragraph"><p>Synonym creation do not require that the target object exists.</p></div>
-<div class="paragraph"><p>Any `ALTER TABLE &#8230; ` will prevent flashback from working.</p></div>
+<div class="paragraph"><p>Any <tt>ALTER TABLE ...</tt> will prevent flashback from working.</p></div>
 <div class="paragraph"><p>Semijoins stand for <tt>EXISTS</tt> operators.</p></div>
 <div class="paragraph"><p><tt>AVG(NULL) = NULL != 0</tt></p></div>
 <div class="paragraph"><p>Available pseudocolumns in flashback version query are:</p></div>
@@ -755,7 +755,7 @@ CHECK
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br />
-Last updated 2013-04-14 14:40:45 CEST
+Last updated 2013-04-30 19:59:45 CEST
 </div>
 </div>
 </body>

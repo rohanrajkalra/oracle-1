@@ -1,8 +1,9 @@
 Notes for exams 1Z0-052 & 1Z0-053 from the "All in One OCA-OCP" book
 ====================================================================
-Joseph HERLANT <herlantj@gmail.com>
-v1.0.1, 2013-04-16 : Minor corrections and addings
+Joseph HERLANT <josephherlant@free.fr>
+v1.0.1, 2013-04-30: Minor corrections and addings
 :encoding: UTF-8
+:lang: en
 :data-uri:
 :icons:
 :iconsdir: /usr/share/asciidoc/images/icons/
@@ -41,7 +42,7 @@ Backup check logical (RMAN command) & V$DATABASE_BLOCK_CORRUPTION
 *Change SQL*Plus prompt:* in ORACLE_HOME/sqlplus/admin/glogin.sql => set sqlprompt "_user@_connect_identifiers>"
 ===============================
 
-WARNING: This document is my personnal notes I took when reading the "OCA/OCP Oracle Database 11g: All-in-One Exam Guide" to prepare 1Z0-052 and 1Z0-053 exams. This is not a complete review of the exams topics, just the ones I either didn't konw or having hard time to remember. 1Z0-051 exam is not correctly reviewed here because I passed the 1Z0-047 exam instead.
+WARNING: This document is my personnal notes I took when reading the "OCA/OCP Oracle Database 11g: All-in-One Exam Guide" to prepare 1Z0-052 and 1Z0-053 exams. This is not a complete review of the exams topics, just the ones I either didn't know or having hard time to remember. 1Z0-051 exam is not correctly reviewed here because I passed the 1Z0-047 exam instead.
 
 .Exams to chapters matching
 [options="header"]
@@ -113,13 +114,13 @@ Main background processes
 
 System Monitor (SMON):: mounts the database by locating and validating controlfiles. Then opens database by locating and validating datafiles and online log files. Once database opened, it does various tasks such as coalescing free space in datafiles.
 
-Process Monirot (PMON):: monitors server processes and detects any problem with the sessions. If a sessions has terminated abnormally, PMON will destroy the associated processes, return session's PGA to the server and rollback any uncommited transaction.
+Process Monirot (PMON):: monitors server processes and detects any problem with the sessions. If a session has terminated abnormally, PMON will destroy the associated processes, return session's PGA to the server and rollback any uncommited transaction.
 
 Database Writer (DBWn):: Writes dirty buffers from DB buffer cache to the datafiles (a session only modifies data in buffer cache, not directly on disks. Commit does not implies any write to disk!). It writes as little blocks as possible as rarely as possible. 4 events will force DBWn to write: No free buffers (neither dirty nor pinned - currently used by another session), too many dirty buffers (defined internally), a 3 second timeout (3 seconds without writing any buffers), and checkpoints (Full: manual, or on database closing ; partial (for just a tablespace or datafile): when datafile/tablespace are taken offline / backup mode / read only).
 
 **Form Oracle 8i, checkpoints do not occur on log switch anymore.**
 
-Log Writer (LGWR):: flushes the log buffer (containing blocks change vectors) to the online log files on disk in real time. 3 events generate this: a session commit, a third full log buffer, just before the DBWn  writes. Write-on-commit can be set in background mode (to prevent the session from hanging on commit), but if server crashed, some block changes can no have been written to online logs.
+Log Writer (LGWR):: flushes the log buffer (containing blocks change vectors) to the online log files on disk in real time. 3 events generate this: a session commit, a third full log buffer, just before the DBWn  writes. Write-on-commit can be set in background mode (to prevent the session from hanging on commit), but if server crashed, some block changes can have not been written to online logs.
 
 Checkpoint Process (CKPT):: Handles full checkpoints requested manually or on closing database. Is also responsible of asking frequent incremental checkpoints to the DBWn for minimizing recovery time. Also writes the RBA (Redo Byte Address) aka checkpoint position (redo stream at which recovery must begin) to the controlfile.
 
@@ -139,7 +140,7 @@ Other background processes
 CQJn,Jnnn:: Manage jobs scheduled. CQJn for the job queue and sending jobs to a job queue. Jnnn for execution of a job.
 Dnnn,Snnn:: Dnnn is the dispatcher process that will send SQL calls to shared server processes. Snnn is the same but when the shared server mechanism has been enabled.
 DBMR:: resource manager.
-DIA0:: diagnosability process zero is responsbible for hang detection and deadlock resolution.
+DIA0:: diagnosability process zero is responsible for hang detection and deadlock resolution.
 DIAG:: for disagnostic dumps and executes oradebug commands.
 FBDA:: flashback data archiver process archives the historical rows of tracked tables into flashback data archives.
 PSPn:: Process spawner for creating and managing other Oracle processes.
@@ -165,7 +166,7 @@ Chapter 2: Installing and creating a DB
 
 In Linux & Unix environments, if the DISPLAY variable is not set properly, the OUI will not be able to open a window and will throw an error.
 
-In windows, registery keys are under HKEY_LOCAL_MACHINE\SOFTWARE\ORACLE. Registry keys that contains the parameters of the windows service are under HKE_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\OracleService*<DB_SID>*
+In windows, registery keys are under HKEY_LOCAL_MACHINE\SOFTWARE\ORACLE. Registry keys that contains the parameters of the windows service are under HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\OracleService *<DB_SID>*
 
 In an instance parameter file, the only parameter that has no default value is the "DB_NAME" parameter, so it is the only required. The DB_NAME can be up to 8 characters long, begining with a letter and containing letters and digits only.
 
@@ -207,7 +208,7 @@ SYSOPER has the ability to issue:
 SYSDBA and SYSOPER are not users: they are privileges that can be granted to users. By default only user SYS has these privileges until they are deliberatly granted to other users.
 Normal (not sysoper/sysdba) connections authenticate against the data dictionnary. Connections using sysdba or sysoper privileges authenticate externally, so do not need the database to be opened to authenticate.
 
-Dynamic performance views are populated from the instance (access from nomount) or the controlfile (access from mount); DBA\_, ALL\_ and USER\_ views are populated from the data dictionnary (access in open mode only).
+Dynamic performance views are populated from the instance (access from nomount) or the controlfile (access from mount); DBA_, ALL_ and USER_ views are populated from the data dictionnary (access in open mode only).
 
 The default scope of an ALTER SYSTEM is both memory and SPFILE!
 
@@ -220,7 +221,15 @@ The SMON process will roll back incomplete transactions, after opening the datab
 Chapter 4: Oracle Networking
 ----------------------------
 
-Execution of an SQL statement goes through 4 stages: parse (transforms statement in something executable using the shared pool), bind (expanding variables into literals), execute (interacting with data buffer cache which sometimes implies access tot he datafiles), fetch (server process sends data to the user process).
+Global functionning
+~~~~~~~~~~~~~~~~~~~
+
+Execution of an SQL statement goes through 4 stages:
+
+ . parse (transforms statement in something executable using the shared pool)
+ . bind (expanding variables into literals)
+ . execute (interacting with data buffer cache which sometimes implies access tot he datafiles)
+ . fetch (server process sends data to the user process)
 
 Oracle net is responsible for establishing a session and then for the ongoing communication between the user process and the server process (transmitting SQL and fetching result back).
 
@@ -248,13 +257,16 @@ sqlnet.ora file contains settings that apply to all connections and listeners, s
 
 The TNS_ADMIN variable contains the path to the listener.ora, tnsnames.ora and sqlnet.ora to use in the set environment.
 
-Dedicated server implies: listener create a server process at user connection request. This server process will execute the SQL.
+Dedicated server implies: listener creates a server process at user connection request. This server process will execute the SQL.
 
-Shared server implies: listener will transfert the user process to one dispatcher (load balancing between all dispatchers) that will queue the statements in a common queue. A shared server process (not tied to a session) that will tahe the job from the common queue and then queue the fetched result back to the initial dispatcher's response queue that will transmit it to the user process.
+Shared server environments
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Shared server implies: listener will transfert the user process to one dispatcher (load balancing between all dispatchers) that will queue the statements in a common queue. A shared server process (not tied to a session) that will take the job from the common queue and then queue the fetched result back to the initial dispatcher's response queue that will transmit it to the user process.
 
 Listener connection is transient but connection between user process and dispatcher will persist for the duration of the session.
 
-The common queue is shared by all dispatchers. All shared server processes monitor the common queue monitor the common queue.
+The common queue is shared by all dispatchers. All shared server processes monitor the common queue.
 
 The response queue is specific to the dispatcher that recieved the job (SQL) in the 1st place. Each dispatcher monitors its own response queue.
 
@@ -276,7 +288,7 @@ Chapter 5: Oracle Storage
 
 If a column of a table is defined as a user-defined object segment that itself has columns, then the column can be stored in its own segment called `a nested table`.
 
-To allocate manually a new extent to a segment (here a table), use: `ALTER TABLE <table_name> ALLOCATE EXTENT [STORAGE (datafile '<file_name>']`
+To allocate manually a new extent to a segment (here a table), use: `ALTER TABLE <table_name> ALLOCATE EXTENT [STORAGE (datafile '<file_name>')]`
 
 Oracle Home cannot be in ASM. Only datafiles, backup, redo and datapump files can be stored in ASM.
 
@@ -303,16 +315,16 @@ Before you can create a table you must have the "CREATE TABLE" grant *AND* quota
 
 List of users that are in the password file are accessible through the `V$PWFILE_USERS` dynamic view.
 
-To have external authentication on normal user without advanced security option, create the account with the same name that the OS account prefixed with the value of the "OS_AUTHENT_PREFIX" init parameter (which defaults to OP$).
+To have external authentication on normal user without advanced security option, create the account with the same name that the OS account prefixed with the value of the "OS_AUTHENT_PREFIX" init parameter (which defaults to OPS$).
 On windows domain, the user name will be "DOMAIN\USER", and the prefix will be added before the DOMAIN.
 
 Using external authentication can be very useful, but only if the users actually log on to the machine hosting the database. Users will rarely do this, so the technique is more likely to be of value for accounts used for running maintenance or batch jobs.
 
 Revocation of a system privilege will not cascade (unlike revocation of an object privilege which will cascade the object privileges granted from the "with grant option" to other users).
 
-Grant privilege on ANY object_type will not grants rights on ths SYS schema (to protect dictionnary).
+Grant privilege on ANY object_type will not grants rights on the SYS schema (to protect dictionnary).
 
-A user can only revoke objects-privileges that *he/she granted*.
+A (non-dba) user can only revoke objects-privileges that *he/she granted*.
 
 To enable a non default role on your session, use the SET ROLE rolename.
 If you wan a user to enable a role only by a specific procedure, use: CREATE ROLE rolename IDENTIFIED USING procedure_name;
@@ -321,7 +333,7 @@ Resource limits will not be applied unless the `RESOURCE_LIMIT` instance paramet
 
 In a profile, the `LIMIT SESSION_PER-USER` will not be applied unless the `RESOURCE_LIMIT` is set to TRUE.
 
-A profile cannot be dropped if it has been assigned to a user. They must be altered ti a different profile first, or use `DROP PROFILE <profile_name> CASCADE;` which sill automatically reassign the assigned users to the default profile.
+A profile cannot be dropped if it has been assigned to a user. They must be altered to a different profile first, or use `DROP PROFILE <profile_name> CASCADE;` which will automatically reassign the assigned users to the default profile.
 
 A profile can limit logical I/O, from the database buffer cache, but not physical I/O from the database.
 
@@ -369,16 +381,16 @@ For ISO/ANSI compliance, you can specify the VARCHAR datatype, but any column of
 A table can be organized in a way of:
 
  * a `heap table`: simplest, randomly organized
- * an `index-organized table`: store rown in the order of an index key
+ * an `index-organized table`: store rows in the order of an index key
  * an `index cluster`: can denormalize tables in parent-child relationship so that related rows from different tables are stored together
  * a `hash cluster`: force a random distribution rows to break ordering based on the entry sequence
  * a `partitionned table`:store rows in separated physical structures (the partitions), allocating rows according to the value of a column
 
-Temporary tables exists ideally only in the PGA of the session that is using them (no disk or database buffer cache activity). If PGA is not big enough, the user's temporary tablespace will be used (and, as always with TEMP tablespaces, the db buffer cache will still be skipped). => faster than classic tables!
+Temporary tables exists ideally only in the PGA of the session that is using them (no disk or database buffer cache activity). If PGA is not big enough, the user's temporary tablespace will be used (and as always with TEMP tablespaces, the db buffer cache will still be skipped). => faster than classic tables!
 
 Temporary tables' DML operation do not generate redo logs => faster than classic tables!
 
-It is recommended to put an index on the foreign key to help Oracle searching for keys (when deleting rown in parent table for example).
+It is recommended to put an index on the foreign key to help Oracle searching for keys (when deleting rows in parent table for example).
 
 There is no precompilation that makes a view quicker than the query without the view.
 
@@ -393,7 +405,7 @@ Query plan techniques
 
 `Sort merge` technique sorts the tables according to the join column and then merges them together (compromise among disk, memory and CPU).
 
-`Skip-scanning` method is used when the leftmost column of a composite index is not included in a select. That is mutch less effiscient than if the leftmost column was included.
+`Skip-scanning` method is used when the leftmost column of a composite index is not included in a select. That is much less effiscient than if the leftmost column was included.
 
 Indexes
 ~~~~~~~
@@ -406,11 +418,11 @@ Unlike B*Tree indexes, bitmap indexes include NULL values.
 
 Use bitmap indexes only with a low cardinality.
 
-When creating an index with the `NOSORT` option, you indicate Oracle that the rows do not need to be sorted; if they are not already sorted (in the index' order), the index creation will fail.
+When creating an index with the `NOSORT` option, you indicate Oracle that the rows do not need to be sorted; if they are not already sorted (in the index order), the index creation will fail.
 
 If you create a PK/UNIQUE constraint on 1 or more columns and a unique index already exists on these columns, oracle will detect it and use it for the PK/UNIQUE constraint. If the existing index is a NON-UNIQUE index, it will be used and converted to a UNIQUE index.
 
-Dropping a constraint that have an implicit index defined will also drop the index, but the index was explicitly created before the contraint, then the index will survive.
+Dropping a constraint that have an implicit index defined will also drop the index, but if the index was explicitly created before the contraint, then the index will survive.
 
 %Test:% 2 errors Q17,20 (2013-03-24)
 
@@ -423,7 +435,7 @@ Truncating a table only resets its High Water Mark.
 
 Closing a Windows SQL*Plus terminal with an "exit" will commit transactions, but NOT on all the other Operating Systems!
 
-PL/SQL functions are similar in concept to a PL/SQL procedure but it does not have OUT argument and cannot be invoked with `EXECUTE`. It returns a single value with the `RETURN`statement.
+PL/SQL functions are similar in concept to a PL/SQL procedure but it does not have OUT argument and cannot be invoked with `EXECUTE`. It returns a single value with the `RETURN` statement.
 
 DML statement acquire at least 2 locks:
 
@@ -494,11 +506,11 @@ Can a `shutdown abort` corrupt a database? No, it is impossible to corrupt the d
 
 At instance startup, the roll forward phase reconstructs UNDO segments in memory and buffer cache from the active and current redo logs to enable the rollback phase.
 
-Instance recovery never needs an ARCHIVE redo log file.
+Instance recovery never needs an ARCHIVED redo log file.
 
 MTTR (-> Mean Time To Recover) can be controlled by the `FAST_START_MTTR_TARGET` (which defaults to 0, that means UNLIMITED). This initialization parameter makes the DWR work more harder to ensure that the time between the checkpoint time (in the redo) and the current time tend to be near the value of this particular parameter. This parameter also enables "checkpoint auto-tunning".
 
-MTTR Advisor can be seen through `V$INSTANCE_RECOVERY`view.
+MTTR Advisor can be seen through `V$INSTANCE_RECOVERY` view.
 
 Full checkpoint only occurs with orderly shutdown or by user request (`alter system checkpoint`).
 
@@ -577,28 +589,29 @@ Health monitor will run reactively or on demand and will write errors details to
 Health monitor's PL/SQL package => DBMS_HM
 
 .Actions that do the Health Monitor
- * In NOMOUNT mode: checks the "DB structure integrity" (integrity of the controlfiles)
- * In MOUNT mode: checks 
+ * In NOMOUNT mode, checks the "DB structure integrity" (integrity of the controlfiles)
+ * In MOUNT mode, checks:
   ** the "DB structure integrity" (integrity of the controlfiles + online redo logs and datafile headers) 
   ** the "Redo Integrity check" (online and archived logfiles accessibility and corruptions)
  * In OPEN mode: 
   ** scans every data block for corruption
   ** checks data dictionnary integrity
-  ** check undo segments integrity
+  ** checks undo segments integrity
+
 
 DRA:: Data Recovery Advisor : makes the use of informations gathered by the Health Monitor to find problems and contructs RMAN scripts to repair them. It can do nothing unless the instance is in nomount mode or higher.
 
 If one or more failure exists, then you should typically use:
 
- . `LIST FAILURE;` RMAN command to show information about the failure
+ . `LIST FAILURE;` RMAN command to show informations about the failure
  . `ADVISE FAILURE;` RMAN command *in the SAME RMAN session* to obtain a report of repair. DRA will not generate any advice if you have not first asked it to the list the failures. Fixed failures or occurence since last listing will not be advised upon.
  . `REPAIR FAILURE;` RMAN command *in the SAME RMAN session* to automatically run the generated repair script
 
 DRA will function only for a single-instance database. It cannot work with a RAC clustered database, nor against a DataGuard standby database.
 
-In *NOarchivelog* mode, the corruption of a datafile will mean full resore and a clear of the logfile groups using `ALTER DATABASE CLEAR LGFILE GROUP <group_number>;`. This recreates the specified logfile group. Other solution would be to drop the relevant tablespace...
+In *NOarchivelog* mode, the corruption of a datafile will mean full resore and a clear of the logfile groups using `ALTER DATABASE CLEAR LOGFILE GROUP <group_number>;`. This recreates the specified logfile group. Other solution would be to drop the relevant tablespace...
 
-In *NOarchivelog* mode, restoring an incremental backup will need to use the `RECOVER DATABASE NOREDO;` command after the full backup restore.
+In *NOarchivelog* mode, restoring an incremental backup will need the use of `RECOVER DATABASE NOREDO;` command after the full backup restore.
 
 RMAN will always apply incremental backups in preference to applying redo data (if they are available).
 
@@ -627,7 +640,7 @@ If you use the backup with the MAXCORRUPT option, you can revover corrupted bloc
 Chapter 17: Advanced RMAN facilities
 ------------------------------------
 
-When using rman recovery catalog, RMAN repository is also stored in the controlfile of the target database.
+When using rman recovery catalog, RMAN repository is also be stored in the controlfile of the target database.
 
 The retention of the RMAN repository contained in the controlfile is controlled by the `CONTROLFILE_RECORD_KEEP_TIME` parameter that defaults to 7 days. The recovery catalog can retain data indefinitely.
 
@@ -635,7 +648,7 @@ The user owning the recovery catalog must have the `RECOVERY_CATALOG_OWNER` role
 
 The RMAN executable must be the same release as the TARGET database, but it does not need to be the same version as the catalog.
 
-The RMAN catalog ust be *CREATED* with a version of RMAN that is equal or higher than the version of any database that will be registered in it.
+The RMAN catalog must be *CREATED* with a version of RMAN that is equal or higher than the version of any database that will be registered in it.
 
 If you are using synchronous I/O but you have set BACKUP_DISK_IO_SLAVES init parameter, then the I/O performance is monitored in the V$BACKUP_ASYNC_IO.
 
@@ -654,7 +667,7 @@ To recover from the loss of a tempfile, create a new one and drop the old one. T
 
 In *NOarchivelog* mode, the loss of a datafile will always result in a complete restore of the database.
 
-A `RECOVER DATABASE UNTIL ...;` will stop immediately *BEFORE* applying the chage vector of the nominated time or SCN (_not immediately after_).
+A `RECOVER DATABASE UNTIL ...;` will stop immediately *BEFORE* applying the change vector of the nominated time or SCN (_not immediately after_).
 
 %Test:% 1 error Q2 (2013-04-01)
 
@@ -674,7 +687,7 @@ RVWR:: Recovery writer. It writes data from the `flashback buffer` (area of memo
 
 Flashback logs cannot be multiplexed and are not archived. Their management and creation is automatic.
 
-Flashback Database requires flashback logs, the Archivelog mode and the use of `OPEN RESETLOGS`after the flashback.
+Flashback Database requires flashback logs, the Archivelog mode and the use of `OPEN RESETLOGS` after the flashback.
 
 To configure Flashback Database:
 
@@ -685,7 +698,7 @@ To configure Flashback Database:
  . `ALTER DATABASE FLASHBACK ON`
  . Open database
 
-To get the status of the Flashback technology, use `SELECT flashback_on fom V$DATABASE|V$TABLESPACE;`.
+To get the status of the Flashback technology, use `SELECT flashback_on from V$DATABASE|V$TABLESPACE;`.
 
 To list Flashback Database logs, use `V$FLASHBACK_DATABASE_LOG`.
 
@@ -706,7 +719,7 @@ If Flashback logging is impacting adversely on performance, the only thing to do
 Flashback Query
 ~~~~~~~~~~~~~~~
 
-Flashback Query (the 3 variations) relies on the use of UNDO segments to reconstruct data as it where in a certain point in time.
+Flashback Query (the 3 variations) relies on the use of UNDO segments to reconstruct data as it were in a certain point in time.
 
 You can query tables as of an earlier point in time, but you can never execute DML against the older version of the data.
 
@@ -721,7 +734,7 @@ To flash back 2 tables in a foreign key relationship, flashback both tables in o
 Flashback DROP
 ~~~~~~~~~~~~~~
 
-Flashback Drop will not be able to flashback a TRUNCATE!
+Flashback Drop will *not* be able to flashback a `TRUNCATE` !
 
 In a flash back Drop, the table, associated indexes and permissions will be restored.
 
@@ -753,7 +766,7 @@ ASM Mirroring defaults to a single mirror, but can be set to `NONE` or `DOUBLE`.
 
 Stripping is automatic and cannot be disabled.
 
-ASM is a management and control facility tat makes files available. It does not do the actual I/O work.
+ASM is a management and control facility that makes files available. It does not do the actual I/O work.
 
 An ASM instance cannot mount or open a database.
 
@@ -774,7 +787,7 @@ Required fields in an ASM instance parameter file are:
  * `ASM_DISKSTRING` that is the list of path identifying the disks to be given to ASM
 
 If an ASM instance fails, the dependent RDBMS instances using it will abort.
-RMAN is the only too that can backup ASM files.
+RMAN is the only tool that can backup ASM files.
 
 +++<u>Test:</u>+++ 0 error (2013-04-03)
 
@@ -787,7 +800,7 @@ Chapter 21: The Resource Manager
 
 The `RESOURCE_MANAGER_PLAN` instance parameter (that defaults to DEFAULT_MAINTENANCE_PLAN) is the way to control Resource Manager. It can also be set using the scheduler or with the `DBMS_RESOURCE_MANAGER.SWITCH_PLAN` procedure.
 
-`DBMS_RESOURCE_MANAGER_PRIVS` package is used to put user into consumer groups and to grant system privileges necessary to administer the Resource Manager. The corresponding role (`ADMINISTER RESOURCE MANAGER`) cannot be granted or revoked other way than using this package.
+`DBMS_RESOURCE_MANAGER_PRIVS` package is used to put users into consumer groups and to grant system privileges necessary to administer the Resource Manager. The corresponding role (`ADMINISTER RESOURCE MANAGER`) cannot be granted or revoked other way than using this package.
 
 Every user can switch its consumer group using the `DBMS_SESSION.SWITCH_CURRENT_CONSUMER_GROUP` procedure.
 
@@ -800,7 +813,7 @@ There are 4 priority levels that can be used in a plan.
 
 Memory allocated to Resource Manager is the Pending Area (part of the SGA). It is also used to validate a plan before saving it.
 
-Every plan must include the `OTHER_GROUP` group; otherwise, the validation will fail in the pending area and the plan will not be savec in the data dictionnary.
+Every plan must include the `OTHER_GROUP` group; otherwise, the validation will fail in the pending area and the plan will not be saved in the data dictionnary.
 
 Active session in Resource Manager vocabulary includes running sessions and idle sessions with uncommited transaction(s).
 
@@ -813,9 +826,9 @@ Chapter 22: The scheduler
 
 CQJ0:: Job Coordinator process. It monitors `DBA_SCHEDULER_JOBS` view and launches the `Jnnn` process to run a job.
 
-`JOB_QUEUE_PROCESS` instance parameter limits the max number (0 to 1000 and defaults to 1000) of Jnn that can be launched. If set to 0, the scheduler will not function.
+`JOB_QUEUE_PROCESS` instance parameter limits the max number (0 to 1000 and defaults to 1000) of Jnnn that can be launched. If set to 0, the scheduler will not function.
 
-By default jobs, programs are disabled in the scheduler at creation time.
+By default jobs and programs are disabled in the scheduler at creation time.
 
 Job class is used to associate 1 or more job with a Resource Manager consumer group and also to control logging levels.
 
@@ -895,7 +908,7 @@ Directory (or directories) can be specified to a datapump job at 4 levels (in or
  . A per-file within the datapump job
  . A parameter applied to the whole datapump job at command-line level
  . The `DATAPUMP_DIR` environment variable
- . The `DATA _PUMP_DIR` directory
+ . The `DATA_PUMP_DIR` directory
 
 Datapump has 2 methods for loading and unloading data:
 
@@ -912,9 +925,9 @@ Transportable tablespaces requires data to be converted to the endian format. To
 Tables reorganization
 ~~~~~~~~~~~~~~~~~~~~~
 
-`DBA_RESUMABLE`view lists all suspended sessions. Resumable can be set:
+`DBA_RESUMABLE` view lists all suspended sessions. Resumable can be set:
 
- * at session level using `ALTER SESSION ENABLE RESULAMBLE [TIMEOUT <seconds>] [name <operation_name>];`. TIMEOUT defauts to infinite; NAME is the name that would appear in DBA_RESUMABLE
+ * at session level using `ALTER SESSION ENABLE RESUMABLE [TIMEOUT <seconds>] [name <operation_name>];`. TIMEOUT defauts to infinite; NAME is the name that would appear in DBA_RESUMABLE
  * at system level by setting the `RESUMABLE_TIMEOUT` instance parameter
 
 Row migration is caused by UPDATE statement. INSERT or DELETE can NEVER cause row migration.
@@ -923,7 +936,7 @@ Reorganizing a table with a MOVE will render all associated indexes unusable.
 
 A MOVE operation will lock the table against DML. You cannot move a table if there is an uncommited transaction against it.
 
-To find chained rows, use the `ANALYZE` command, *NOT* `DBMS_STATS` package. Then go to the `CHAIN_CNT`of the `DBA_TABLES`. IF the `AVG_ROW_LEN` is less than the block size, these are migrated rows; if it is greater, they will be chained rows.
+To find chained rows, use the `ANALYZE` command, *NOT* `DBMS_STATS` package. Then go to the `CHAIN_CNT` of the `DBA_TABLES`. If the `AVG_ROW_LEN` is less than the block size, these are migrated rows; if it is greater, they will be chained rows.
 
 Tables in tablespace that use the older freelist technique for managing segment space usage cannot be shrunk.
 
@@ -972,7 +985,7 @@ There will be 3 stages of PGA memory allocation:
  * One-pass: The SORT is made by batch of rows into memory. Each batch is written to disk and a final MERGE is made in memory.
  * Multipass: Both SORT and MERGE are separated into batches, sorted and written to disk.
 
-The LOG_BUFFER is the only SGA structure that cannot be adjusted dynamically. If cannot therefore be automatically generated.
+The LOG_BUFFER is the only SGA structure that cannot be adjusted dynamically. It cannot therefore be automatically generated.
 
 If AMM (`MEMORY_TARGET`) is set and that you also set `PGA_AGGREGATE_TARGET` and `SGA_TARGET`, these will be considered as *MINIMUM*. AMM will never reduce PGA and SGA beneath those sizes.
 
@@ -980,7 +993,7 @@ Automatic memory management cannot function unless the `statistics_level` instan
 
 An invalid object may become valid on next access, but unusable indexes must be made valid by manual rebuild.
 
-To launch SQL Tunning Advisor job manually, use DBMS_SQLTUNE.EXECUTE_TUNNING_TASK`.
+To launch SQL Tunning Advisor job manually, use `DBMS_SQLTUNE.EXECUTE_TUNNING_TASK`.
 
 SQL Access Advisor can recommend changes to Materialize views, changing indexes and partitionning, and enabling query rewrite. But only SQL Access Advisor recommends changes to Materialized views (including their creation).
 
@@ -1000,13 +1013,13 @@ Globalization settings can be specified at the following levels (in order or pre
  * Instance: view is `nls_instance_parameters`
  * Client environment: viewed in shell environment and on session it impacts
  * Session: views are `V$NLS_PARAMETERS` and `nls_session_parameters`
- * Statements: for example, through functions like TO_CHAR(<column>, 'Day dd, Month YYYY', 'NLS_DATE_LANGUAGE=DUTCH')
+ * Statements: for example, through functions like `TO_CHAR(<column>, 'Day dd, Month YYYY', 'NLS_DATE_LANGUAGE=DUTCH')`
 
 Since release 9i, the National Character Set of the database can only be unicode (but the database characterset can be something else) => UTF8 (variable size) and AL16UTF16 (fixed-width).
 
 `NLS_DATE_LANGUAGE` and `NLS_SORT` are controlled by `NLS_LANGUAGE`.
 
-`NLS_DATE_FORMAT`and `NLS_NUMERIC_CHARACTERS` are controlled by `NLS_TERRITORY`.
+`NLS_DATE_FORMAT` and `NLS_NUMERIC_CHARACTERS` are controlled by `NLS_TERRITORY`.
 
 `V$NLS_VALID_VALUES` lists the supported values for the various NLS parameters.
 

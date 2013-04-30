@@ -553,9 +553,9 @@ footnotes: function () {
 <div id="header">
 <h1>Notes for exams 1Z0-052 &amp; 1Z0-053 from the "All in One OCA-OCP" book</h1>
 <span id="author">Joseph HERLANT</span><br />
-<span id="email"><tt>&lt;<a href="mailto:herlantj@gmail.com">herlantj@gmail.com</a>&gt;</tt></span><br />
+<span id="email"><tt>&lt;<a href="mailto:josephherlant@free.fr">josephherlant@free.fr</a>&gt;</tt></span><br />
 <span id="revnumber">version 1.0.1,</span>
-<span id="revdate">2013-04-16</span>
+<span id="revdate">2013-04-30</span>
 <br /><span id="revremark">Minor corrections and addings</span>
 </div>
 <div id="content">
@@ -688,7 +688,7 @@ M2XKlGHBD0sgkURdXR2PP/44FRUVNwV+qP7Tp09z8ODBjNxmRAQSSRw4cIBly5axdOnSvwh4RVH4
 vr6+wTfK/4tEfzeeMmUKkydPzhg8jJAAREgEg0H6+vrQNC2pFL8ZUVWVrKws8vPzycnJQVXVjH/s
 /F/lgJiyQFHragAAAABJRU5ErkJggg==" />
 </td>
-<td class="content">This document is my personnal notes I took when reading the "OCA/OCP Oracle Database 11g: All-in-One Exam Guide" to prepare 1Z0-052 and 1Z0-053 exams. This is not a complete review of the exams topics, just the ones I either didn&#8217;t konw or having hard time to remember. 1Z0-051 exam is not correctly reviewed here because I passed the 1Z0-047 exam instead.</td>
+<td class="content">This document is my personnal notes I took when reading the "OCA/OCP Oracle Database 11g: All-in-One Exam Guide" to prepare 1Z0-052 and 1Z0-053 exams. This is not a complete review of the exams topics, just the ones I either didn&#8217;t know or having hard time to remember. 1Z0-051 exam is not correctly reviewed here because I passed the 1Z0-047 exam instead.</td>
 </tr></table>
 </div>
 <div class="tableblock">
@@ -891,7 +891,7 @@ Process Monirot (PMON)
 </dt>
 <dd>
 <p>
-monitors server processes and detects any problem with the sessions. If a sessions has terminated abnormally, PMON will destroy the associated processes, return session&#8217;s PGA to the server and rollback any uncommited transaction.
+monitors server processes and detects any problem with the sessions. If a session has terminated abnormally, PMON will destroy the associated processes, return session&#8217;s PGA to the server and rollback any uncommited transaction.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -910,7 +910,7 @@ Log Writer (LGWR)
 </dt>
 <dd>
 <p>
-flushes the log buffer (containing blocks change vectors) to the online log files on disk in real time. 3 events generate this: a session commit, a third full log buffer, just before the DBWn  writes. Write-on-commit can be set in background mode (to prevent the session from hanging on commit), but if server crashed, some block changes can no have been written to online logs.
+flushes the log buffer (containing blocks change vectors) to the online log files on disk in real time. 3 events generate this: a session commit, a third full log buffer, just before the DBWn  writes. Write-on-commit can be set in background mode (to prevent the session from hanging on commit), but if server crashed, some block changes can have not been written to online logs.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -993,7 +993,7 @@ DIA0
 </dt>
 <dd>
 <p>
-diagnosability process zero is responsbible for hang detection and deadlock resolution.
+diagnosability process zero is responsible for hang detection and deadlock resolution.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -1060,7 +1060,7 @@ VKTM
 <h2 id="_chapter_2_installing_and_creating_a_db">2. Chapter 2: Installing and creating a DB</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>In Linux &amp; Unix environments, if the DISPLAY variable is not set properly, the OUI will not be able to open a window and will throw an error.</p></div>
-<div class="paragraph"><p>In windows, registery keys are under HKEY_LOCAL_MACHINE\SOFTWARE\ORACLE. Registry keys that contains the parameters of the windows service are under HKE_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\OracleService*&lt;DB_SID&gt;*</p></div>
+<div class="paragraph"><p>In windows, registery keys are under HKEY_LOCAL_MACHINE\SOFTWARE\ORACLE. Registry keys that contains the parameters of the windows service are under HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\OracleService <strong>&lt;DB_SID&gt;</strong></p></div>
 <div class="paragraph"><p>In an instance parameter file, the only parameter that has no default value is the "DB_NAME" parameter, so it is the only required. The DB_NAME can be up to 8 characters long, begining with a letter and containing letters and digits only.</p></div>
 <div class="paragraph"><p>NOMOUNT instance = instance created (following the parameter file) but not connected to a database.</p></div>
 <div class="paragraph"><p>MOUNT mode = instance created and connected to the controlfile of a database.</p></div>
@@ -1106,14 +1106,37 @@ RECOVER
 </ul></div>
 <div class="paragraph"><p>SYSDBA and SYSOPER are not users: they are privileges that can be granted to users. By default only user SYS has these privileges until they are deliberatly granted to other users.
 Normal (not sysoper/sysdba) connections authenticate against the data dictionnary. Connections using sysdba or sysoper privileges authenticate externally, so do not need the database to be opened to authenticate.</p></div>
-<div class="paragraph"><p>Dynamic performance views are populated from the instance (access from nomount) or the controlfile (access from mount); DBA_, ALL\_ and USER\_ views are populated from the data dictionnary (access in open mode only).</p></div>
+<div class="paragraph"><p>Dynamic performance views are populated from the instance (access from nomount) or the controlfile (access from mount); DBA_, ALL_ and USER_ views are populated from the data dictionnary (access in open mode only).</p></div>
 <div class="paragraph"><p>The default scope of an ALTER SYSTEM is both memory and SPFILE!</p></div>
 <div class="paragraph"><p>The SMON process will roll back incomplete transactions, after opening the database (that crashed for example). Rollback occurs while the database is available for use (after the users are able to connect).</p></div>
 <div class="paragraph"><p><u>Test:</u> 5 errors Q1,6,8,10,12 (2013-03-15)</p></div>
 </div>
 <h2 id="_chapter_4_oracle_networking">4. Chapter 4: Oracle Networking</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>Execution of an SQL statement goes through 4 stages: parse (transforms statement in something executable using the shared pool), bind (expanding variables into literals), execute (interacting with data buffer cache which sometimes implies access tot he datafiles), fetch (server process sends data to the user process).</p></div>
+<h3 id="_global_functionning">4.1. Global functionning</h3><div style="clear:left"></div>
+<div class="paragraph"><p>Execution of an SQL statement goes through 4 stages:</p></div>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+parse (transforms statement in something executable using the shared pool)
+</p>
+</li>
+<li>
+<p>
+bind (expanding variables into literals)
+</p>
+</li>
+<li>
+<p>
+execute (interacting with data buffer cache which sometimes implies access tot he datafiles)
+</p>
+</li>
+<li>
+<p>
+fetch (server process sends data to the user process)
+</p>
+</li>
+</ol></div>
 <div class="paragraph"><p>Oracle net is responsible for establishing a session and then for the ongoing communication between the user process and the server process (transmitting SQL and fetching result back).</p></div>
 <div class="paragraph"><p>From Oracle 11G, Sqlnet can only work with the following protocols:</p></div>
 <div class="ulist"><ul>
@@ -1151,10 +1174,11 @@ OS-specific inter-processing communication (IPC) &#8594; for local connections o
 <div class="paragraph"><p>In the lsnrctl prompt, "EXIT" will save the changes, but "QUIT" will NOT!</p></div>
 <div class="paragraph"><p>sqlnet.ora file contains settings that apply to all connections and listeners, such as security rules and encryption.</p></div>
 <div class="paragraph"><p>The TNS_ADMIN variable contains the path to the listener.ora, tnsnames.ora and sqlnet.ora to use in the set environment.</p></div>
-<div class="paragraph"><p>Dedicated server implies: listener create a server process at user connection request. This server process will execute the SQL.</p></div>
-<div class="paragraph"><p>Shared server implies: listener will transfert the user process to one dispatcher (load balancing between all dispatchers) that will queue the statements in a common queue. A shared server process (not tied to a session) that will tahe the job from the common queue and then queue the fetched result back to the initial dispatcher&#8217;s response queue that will transmit it to the user process.</p></div>
+<div class="paragraph"><p>Dedicated server implies: listener creates a server process at user connection request. This server process will execute the SQL.</p></div>
+<h3 id="_shared_server_environments">4.2. Shared server environments</h3><div style="clear:left"></div>
+<div class="paragraph"><p>Shared server implies: listener will transfert the user process to one dispatcher (load balancing between all dispatchers) that will queue the statements in a common queue. A shared server process (not tied to a session) that will take the job from the common queue and then queue the fetched result back to the initial dispatcher&#8217;s response queue that will transmit it to the user process.</p></div>
 <div class="paragraph"><p>Listener connection is transient but connection between user process and dispatcher will persist for the duration of the session.</p></div>
-<div class="paragraph"><p>The common queue is shared by all dispatchers. All shared server processes monitor the common queue monitor the common queue.</p></div>
+<div class="paragraph"><p>The common queue is shared by all dispatchers. All shared server processes monitor the common queue.</p></div>
 <div class="paragraph"><p>The response queue is specific to the dispatcher that recieved the job (SQL) in the 1st place. Each dispatcher monitors its own response queue.</p></div>
 <div class="paragraph"><p>UGA (user global area) is the equivalent to the PGA in a shared server environment. It resides in the SGA. The difference is that the session stack space that is still outside the SGA. The UGA can be configured manually using the "large_pool" parameter.</p></div>
 <div class="paragraph"><p>"shared_servers" parameter (that defaults to 1) controls the number of shared server processes that will be launched at instance startup time. In case of load, Oracle will automatically launch additionnal shared servers until it reaches the "max_shared_servers" (that defaults to a eigth of the "processes" parameter).</p></div>
@@ -1165,7 +1189,7 @@ OS-specific inter-processing communication (IPC) &#8594; for local connections o
 <h2 id="_chapter_5_oracle_storage">5. Chapter 5: Oracle Storage</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>If a column of a table is defined as a user-defined object segment that itself has columns, then the column can be stored in its own segment called <tt>a nested table</tt>.</p></div>
-<div class="paragraph"><p>To allocate manually a new extent to a segment (here a table), use: <tt>ALTER TABLE &lt;table_name&gt; ALLOCATE EXTENT [STORAGE (datafile '&lt;file_name&gt;']</tt></p></div>
+<div class="paragraph"><p>To allocate manually a new extent to a segment (here a table), use: <tt>ALTER TABLE &lt;table_name&gt; ALLOCATE EXTENT [STORAGE (datafile '&lt;file_name&gt;')]</tt></p></div>
 <div class="paragraph"><p>Oracle Home cannot be in ASM. Only datafiles, backup, redo and datapump files can be stored in ASM.</p></div>
 <div class="paragraph"><p>Extent management of a tablespace should always be LOCAL.</p></div>
 <div class="paragraph"><p><tt>ALTER TABLESPACE &lt;ts_name&gt; OFFLINE IMMEDIATE</tt> will not generated a checkpoint (due to the <strong>IMMEDIATE</strong> option) and will need change vectors to be applied before opening it back.</p></div>
@@ -1179,17 +1203,17 @@ OS-specific inter-processing communication (IPC) &#8594; for local connections o
 <div class="paragraph"><p>If a user&#8217;s quota is reduced to below the size of their existing objects (or even reduced to zero), the user objects will survive and be usable but they will not be permitted to get any bigger.</p></div>
 <div class="paragraph"><p>Before you can create a table you must have the "CREATE TABLE" grant <strong>AND</strong> quota on the tablespace in which you create it.</p></div>
 <div class="paragraph"><p>List of users that are in the password file are accessible through the <tt>V$PWFILE_USERS</tt> dynamic view.</p></div>
-<div class="paragraph"><p>To have external authentication on normal user without advanced security option, create the account with the same name that the OS account prefixed with the value of the "OS_AUTHENT_PREFIX" init parameter (which defaults to OP$).
+<div class="paragraph"><p>To have external authentication on normal user without advanced security option, create the account with the same name that the OS account prefixed with the value of the "OS_AUTHENT_PREFIX" init parameter (which defaults to OPS$).
 On windows domain, the user name will be "DOMAIN\USER", and the prefix will be added before the DOMAIN.</p></div>
 <div class="paragraph"><p>Using external authentication can be very useful, but only if the users actually log on to the machine hosting the database. Users will rarely do this, so the technique is more likely to be of value for accounts used for running maintenance or batch jobs.</p></div>
 <div class="paragraph"><p>Revocation of a system privilege will not cascade (unlike revocation of an object privilege which will cascade the object privileges granted from the "with grant option" to other users).</p></div>
-<div class="paragraph"><p>Grant privilege on ANY object_type will not grants rights on ths SYS schema (to protect dictionnary).</p></div>
-<div class="paragraph"><p>A user can only revoke objects-privileges that <strong>he/she granted</strong>.</p></div>
+<div class="paragraph"><p>Grant privilege on ANY object_type will not grants rights on the SYS schema (to protect dictionnary).</p></div>
+<div class="paragraph"><p>A (non-dba) user can only revoke objects-privileges that <strong>he/she granted</strong>.</p></div>
 <div class="paragraph"><p>To enable a non default role on your session, use the SET ROLE rolename.
 If you wan a user to enable a role only by a specific procedure, use: CREATE ROLE rolename IDENTIFIED USING procedure_name;</p></div>
 <div class="paragraph"><p>Resource limits will not be applied unless the <tt>RESOURCE_LIMIT</tt> instance parameter has been set to TRUE.</p></div>
 <div class="paragraph"><p>In a profile, the <tt>LIMIT SESSION_PER-USER</tt> will not be applied unless the <tt>RESOURCE_LIMIT</tt> is set to TRUE.</p></div>
-<div class="paragraph"><p>A profile cannot be dropped if it has been assigned to a user. They must be altered ti a different profile first, or use <tt>DROP PROFILE &lt;profile_name&gt; CASCADE;</tt> which sill automatically reassign the assigned users to the default profile.</p></div>
+<div class="paragraph"><p>A profile cannot be dropped if it has been assigned to a user. They must be altered to a different profile first, or use <tt>DROP PROFILE &lt;profile_name&gt; CASCADE;</tt> which will automatically reassign the assigned users to the default profile.</p></div>
 <div class="paragraph"><p>A profile can limit logical I/O, from the database buffer cache, but not physical I/O from the database.</p></div>
 <div class="paragraph"><p>Public is a role that is granted to everyone, but when connecting using the "AS SYSOPER" syntax, you will appear to be connected to an account named "PUBLIC"! When connected "AS SYSDBA", you will appear to be connected as user "SYS".</p></div>
 <div class="paragraph"><p><tt>GRANT ANY</tt> system privilege protects SYS schema (by excluding its objects from the grant) as long as the <tt>O7_DICTIONNARY_ACCESSIBILITY</tt> is set to <tt>FALSE</tt>.</p></div>
@@ -1249,7 +1273,7 @@ a <tt>heap table</tt>: simplest, randomly organized
 </li>
 <li>
 <p>
-an <tt>index-organized table</tt>: store rown in the order of an index key
+an <tt>index-organized table</tt>: store rows in the order of an index key
 </p>
 </li>
 <li>
@@ -1268,31 +1292,31 @@ a <tt>partitionned table</tt>:store rows in separated physical structures (the p
 </p>
 </li>
 </ul></div>
-<div class="paragraph"><p>Temporary tables exists ideally only in the PGA of the session that is using them (no disk or database buffer cache activity). If PGA is not big enough, the user&#8217;s temporary tablespace will be used (and, as always with TEMP tablespaces, the db buffer cache will still be skipped). &#8658; faster than classic tables!</p></div>
+<div class="paragraph"><p>Temporary tables exists ideally only in the PGA of the session that is using them (no disk or database buffer cache activity). If PGA is not big enough, the user&#8217;s temporary tablespace will be used (and as always with TEMP tablespaces, the db buffer cache will still be skipped). &#8658; faster than classic tables!</p></div>
 <div class="paragraph"><p>Temporary tables' DML operation do not generate redo logs &#8658; faster than classic tables!</p></div>
-<div class="paragraph"><p>It is recommended to put an index on the foreign key to help Oracle searching for keys (when deleting rown in parent table for example).</p></div>
+<div class="paragraph"><p>It is recommended to put an index on the foreign key to help Oracle searching for keys (when deleting rows in parent table for example).</p></div>
 <div class="paragraph"><p>There is no precompilation that makes a view quicker than the query without the view.</p></div>
 <div class="paragraph"><p>View created with <tt>select * from ...</tt> will be transformed internally to <tt>select col1, col2, ... from ...</tt> at the time of the creation and will therefore <strong>NOT</strong> become invalid when a new column will be added to the undelying table, but will not show the added column unless a manual recompilation is made against the view.</p></div>
 <h3 id="_query_plan_techniques">7.2. Query plan techniques</h3><div style="clear:left"></div>
 <div class="paragraph"><p><tt>Nested join</tt> technique passes through one table using an index placed on the other table of a the join to locate the matching rows (usually disk-intensive operation).</p></div>
 <div class="paragraph"><p><tt>Hash join</tt> technique reads the entire table into memory, converts it into a hash table and uses a hashing algorithm to locate the matching rows (memory and CPU intensive).</p></div>
 <div class="paragraph"><p><tt>Sort merge</tt> technique sorts the tables according to the join column and then merges them together (compromise among disk, memory and CPU).</p></div>
-<div class="paragraph"><p><tt>Skip-scanning</tt> method is used when the leftmost column of a composite index is not included in a select. That is mutch less effiscient than if the leftmost column was included.</p></div>
+<div class="paragraph"><p><tt>Skip-scanning</tt> method is used when the leftmost column of a composite index is not included in a select. That is much less effiscient than if the leftmost column was included.</p></div>
 <h3 id="_indexes">7.3. Indexes</h3><div style="clear:left"></div>
 <div class="paragraph"><p><tt>Reverse key indexes</tt> store "John" as "nhoJ". When select is done, Oracle will automatically reverse the search key. Usefull when the data concatenate to the high end of the index.</p></div>
 <div class="paragraph"><p><tt>Compressed indexes</tt> will store the duplicated keys once, followed by a string of all the matching rowids.</p></div>
 <div class="paragraph"><p>Unlike B*Tree indexes, bitmap indexes include NULL values.</p></div>
 <div class="paragraph"><p>Use bitmap indexes only with a low cardinality.</p></div>
-<div class="paragraph"><p>When creating an index with the &#8216;NOSORT` option, you indicate Oracle that the rows do not need to be sorted; if they are not already sorted (in the index&#8217; order), the index creation will fail.</p></div>
+<div class="paragraph"><p>When creating an index with the <tt>NOSORT</tt> option, you indicate Oracle that the rows do not need to be sorted; if they are not already sorted (in the index order), the index creation will fail.</p></div>
 <div class="paragraph"><p>If you create a PK/UNIQUE constraint on 1 or more columns and a unique index already exists on these columns, oracle will detect it and use it for the PK/UNIQUE constraint. If the existing index is a NON-UNIQUE index, it will be used and converted to a UNIQUE index.</p></div>
-<div class="paragraph"><p>Dropping a constraint that have an implicit index defined will also drop the index, but the index was explicitly created before the contraint, then the index will survive.</p></div>
+<div class="paragraph"><p>Dropping a constraint that have an implicit index defined will also drop the index, but if the index was explicitly created before the contraint, then the index will survive.</p></div>
 <div class="paragraph"><p><u>Test:</u> 2 errors Q17,20 (2013-03-24)</p></div>
 </div>
 <h2 id="_chapter_8_dml_and_concurrency">8. Chapter 8: DML and concurrency</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>Truncating a table only resets its High Water Mark.</p></div>
 <div class="paragraph"><p>Closing a Windows SQL*Plus terminal with an "exit" will commit transactions, but NOT on all the other Operating Systems!</p></div>
-<div class="paragraph"><p>PL/SQL functions are similar in concept to a PL/SQL procedure but it does not have OUT argument and cannot be invoked with <tt>EXECUTE</tt>. It returns a single value with the `RETURN`statement.</p></div>
+<div class="paragraph"><p>PL/SQL functions are similar in concept to a PL/SQL procedure but it does not have OUT argument and cannot be invoked with <tt>EXECUTE</tt>. It returns a single value with the <tt>RETURN</tt> statement.</p></div>
 <div class="paragraph"><p>DML statement acquire at least 2 locks:</p></div>
 <div class="ulist"><ul>
 <li>
@@ -1341,9 +1365,9 @@ a <tt>partitionned table</tt>:store rows in separated physical structures (the p
 <div class="sectionbody">
 <div class="paragraph"><p>Can a <tt>shutdown abort</tt> corrupt a database? No, it is impossible to corrupt the database using these types of commands.</p></div>
 <div class="paragraph"><p>At instance startup, the roll forward phase reconstructs UNDO segments in memory and buffer cache from the active and current redo logs to enable the rollback phase.</p></div>
-<div class="paragraph"><p>Instance recovery never needs an ARCHIVE redo log file.</p></div>
+<div class="paragraph"><p>Instance recovery never needs an ARCHIVED redo log file.</p></div>
 <div class="paragraph"><p>MTTR (&#8594; Mean Time To Recover) can be controlled by the <tt>FAST_START_MTTR_TARGET</tt> (which defaults to 0, that means UNLIMITED). This initialization parameter makes the DWR work more harder to ensure that the time between the checkpoint time (in the redo) and the current time tend to be near the value of this particular parameter. This parameter also enables "checkpoint auto-tunning".</p></div>
-<div class="paragraph"><p>MTTR Advisor can be seen through `V$INSTANCE_RECOVERY`view.</p></div>
+<div class="paragraph"><p>MTTR Advisor can be seen through <tt>V$INSTANCE_RECOVERY</tt> view.</p></div>
 <div class="paragraph"><p>Full checkpoint only occurs with orderly shutdown or by user request (<tt>alter system checkpoint</tt>).</p></div>
 <div class="paragraph"><p>Partial checkpoint occurs while:</p></div>
 <div class="ulist"><ul>
@@ -1456,12 +1480,12 @@ Automatic Diagnostic Repository
 <div class="ulist"><div class="title">Actions that do the Health Monitor</div><ul>
 <li>
 <p>
-In NOMOUNT mode: checks the "DB structure integrity" (integrity of the controlfiles)
+In NOMOUNT mode, checks the "DB structure integrity" (integrity of the controlfiles)
 </p>
 </li>
 <li>
 <p>
-In MOUNT mode: checks
+In MOUNT mode, checks:
 </p>
 <div class="ulist"><ul>
 <li>
@@ -1493,7 +1517,7 @@ checks data dictionnary integrity
 </li>
 <li>
 <p>
-check undo segments integrity
+checks undo segments integrity
 </p>
 <div class="dlist"><dl>
 <dt class="hdlist1">
@@ -1513,7 +1537,7 @@ Data Recovery Advisor : makes the use of informations gathered by the Health Mon
 <div class="olist arabic"><ol class="arabic">
 <li>
 <p>
-<tt>LIST FAILURE;</tt> RMAN command to show information about the failure
+<tt>LIST FAILURE;</tt> RMAN command to show informations about the failure
 </p>
 </li>
 <li>
@@ -1528,8 +1552,8 @@ Data Recovery Advisor : makes the use of informations gathered by the Health Mon
 </li>
 </ol></div>
 <div class="paragraph"><p>DRA will function only for a single-instance database. It cannot work with a RAC clustered database, nor against a DataGuard standby database.</p></div>
-<div class="paragraph"><p>In <strong>NOarchivelog</strong> mode, the corruption of a datafile will mean full resore and a clear of the logfile groups using <tt>ALTER DATABASE CLEAR LGFILE GROUP &lt;group_number&gt;;</tt>. This recreates the specified logfile group. Other solution would be to drop the relevant tablespace&#8230;</p></div>
-<div class="paragraph"><p>In <strong>NOarchivelog</strong> mode, restoring an incremental backup will need to use the <tt>RECOVER DATABASE NOREDO;</tt> command after the full backup restore.</p></div>
+<div class="paragraph"><p>In <strong>NOarchivelog</strong> mode, the corruption of a datafile will mean full resore and a clear of the logfile groups using <tt>ALTER DATABASE CLEAR LOGFILE GROUP &lt;group_number&gt;;</tt>. This recreates the specified logfile group. Other solution would be to drop the relevant tablespace&#8230;</p></div>
+<div class="paragraph"><p>In <strong>NOarchivelog</strong> mode, restoring an incremental backup will need the use of <tt>RECOVER DATABASE NOREDO;</tt> command after the full backup restore.</p></div>
 <div class="paragraph"><p>RMAN will always apply incremental backups in preference to applying redo data (if they are available).</p></div>
 <div class="paragraph"><p>SYSTEM and/or active UNDO tablespaces and/or any controlfile copy corruption will all bring database down.</p></div>
 <div class="paragraph"><p>Other tablespaces' datafile corruption &#8658; datafile will be brought offline (and the rest of the database will remain open).</p></div>
@@ -1544,11 +1568,11 @@ Data Recovery Advisor : makes the use of informations gathered by the Health Mon
 </div>
 <h2 id="_chapter_17_advanced_rman_facilities">17. Chapter 17: Advanced RMAN facilities</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>When using rman recovery catalog, RMAN repository is also stored in the controlfile of the target database.</p></div>
+<div class="paragraph"><p>When using rman recovery catalog, RMAN repository is also be stored in the controlfile of the target database.</p></div>
 <div class="paragraph"><p>The retention of the RMAN repository contained in the controlfile is controlled by the <tt>CONTROLFILE_RECORD_KEEP_TIME</tt> parameter that defaults to 7 days. The recovery catalog can retain data indefinitely.</p></div>
 <div class="paragraph"><p>The user owning the recovery catalog must have the <tt>RECOVERY_CATALOG_OWNER</tt> role.</p></div>
 <div class="paragraph"><p>The RMAN executable must be the same release as the TARGET database, but it does not need to be the same version as the catalog.</p></div>
-<div class="paragraph"><p>The RMAN catalog ust be <strong>CREATED</strong> with a version of RMAN that is equal or higher than the version of any database that will be registered in it.</p></div>
+<div class="paragraph"><p>The RMAN catalog must be <strong>CREATED</strong> with a version of RMAN that is equal or higher than the version of any database that will be registered in it.</p></div>
 <div class="paragraph"><p>If you are using synchronous I/O but you have set BACKUP_DISK_IO_SLAVES init parameter, then the I/O performance is monitored in the V$BACKUP_ASYNC_IO.</p></div>
 <div class="paragraph"><p><u>Test:</u> 1 error Q3 (2013-04-01)</p></div>
 </div>
@@ -1558,7 +1582,7 @@ Data Recovery Advisor : makes the use of informations gathered by the Health Mon
 <div class="paragraph"><p>To recover from the loss of a tempfile, create a new one and drop the old one. This can be done online.</p></div>
 <div class="paragraph"><p><tt>V$RECOVER_FILE</tt> is the list of all datafiles found to be damaged or missing. Available in both mount or open mode.</p></div>
 <div class="paragraph"><p>In <strong>NOarchivelog</strong> mode, the loss of a datafile will always result in a complete restore of the database.</p></div>
-<div class="paragraph"><p>A <tt>RECOVER DATABASE UNTIL ...;</tt> will stop immediately <strong>BEFORE</strong> applying the chage vector of the nominated time or SCN (<em>not immediately after</em>).</p></div>
+<div class="paragraph"><p>A <tt>RECOVER DATABASE UNTIL ...;</tt> will stop immediately <strong>BEFORE</strong> applying the change vector of the nominated time or SCN (<em>not immediately after</em>).</p></div>
 <div class="paragraph"><p><u>Test:</u> 1 error Q2 (2013-04-01)</p></div>
 </div>
 <h2 id="_chapter_19_flashback">19. Chapter 19: Flashback</h2>
@@ -1577,7 +1601,7 @@ Recovery writer. It writes data from the <tt>flashback buffer</tt> (area of memo
 </dd>
 </dl></div>
 <div class="paragraph"><p>Flashback logs cannot be multiplexed and are not archived. Their management and creation is automatic.</p></div>
-<div class="paragraph"><p>Flashback Database requires flashback logs, the Archivelog mode and the use of `OPEN RESETLOGS`after the flashback.</p></div>
+<div class="paragraph"><p>Flashback Database requires flashback logs, the Archivelog mode and the use of <tt>OPEN RESETLOGS</tt> after the flashback.</p></div>
 <div class="paragraph"><p>To configure Flashback Database:</p></div>
 <div class="olist arabic"><ol class="arabic">
 <li>
@@ -1611,7 +1635,7 @@ Open database
 </p>
 </li>
 </ol></div>
-<div class="paragraph"><p>To get the status of the Flashback technology, use <tt>SELECT flashback_on fom V$DATABASE|V$TABLESPACE;</tt>.</p></div>
+<div class="paragraph"><p>To get the status of the Flashback technology, use <tt>SELECT flashback_on from V$DATABASE|V$TABLESPACE;</tt>.</p></div>
 <div class="paragraph"><p>To list Flashback Database logs, use <tt>V$FLASHBACK_DATABASE_LOG</tt>.</p></div>
 <div class="paragraph"><p>Flashback Database statistics are in the <tt>V$FLASHBACK_DATABASE_STAT</tt>.</p></div>
 <div class="paragraph"><p>To Flashback a database:</p></div>
@@ -1636,14 +1660,14 @@ Open resetlogs
 <div class="paragraph"><p>If there is not enough room in the FRA for the Flashback Data, <strong>nothing but FLASHBACK DATA</strong> will be deleted in the FRA!</p></div>
 <div class="paragraph"><p>If Flashback logging is impacting adversely on performance, the only thing to do is to stop flashback logging for some tablespaces.</p></div>
 <h3 id="_flashback_query">19.2. Flashback Query</h3><div style="clear:left"></div>
-<div class="paragraph"><p>Flashback Query (the 3 variations) relies on the use of UNDO segments to reconstruct data as it where in a certain point in time.</p></div>
+<div class="paragraph"><p>Flashback Query (the 3 variations) relies on the use of UNDO segments to reconstruct data as it were in a certain point in time.</p></div>
 <div class="paragraph"><p>You can query tables as of an earlier point in time, but you can never execute DML against the older version of the data.</p></div>
 <div class="paragraph"><p>Flashback Version Query cannot work against external and temporary tables, nor against V$ views.</p></div>
 <div class="paragraph"><p>Work done by the <tt>DBMS_FLASHBACK.BACKOUT_TRANSACTION</tt> will be left <strong>UNCOMMITED</strong>. You&#8217;ll have to commit them manually to finish the recover.</p></div>
 <div class="paragraph"><p>Only Flashback Table requires row movement. Flashback Transaction <strong>DO NOT</strong>.</p></div>
 <div class="paragraph"><p>To flash back 2 tables in a foreign key relationship, flashback both tables in one operation.</p></div>
 <h3 id="_flashback_drop">19.3. Flashback DROP</h3><div style="clear:left"></div>
-<div class="paragraph"><p>Flashback Drop will not be able to flashback a TRUNCATE!</p></div>
+<div class="paragraph"><p>Flashback Drop will <strong>not</strong> be able to flashback a <tt>TRUNCATE</tt> !</p></div>
 <div class="paragraph"><p>In a flash back Drop, the table, associated indexes and permissions will be restored.</p></div>
 <div class="paragraph"><p>Flashback Drop is not available for tables in the SYSTEM tablespace. Those ones are purged immediately.</p></div>
 <div class="paragraph"><p><tt>DBA_SEGMENTS</tt> contains RECYCLE BIN segments whereas <tt>DBA_FREE_SPACE</tt> will not take them in account!</p></div>
@@ -1659,7 +1683,7 @@ Open resetlogs
 <div class="paragraph"><p>You can use ASM only for database and recovery files. <strong>Not</strong> for Oracle Home, Alert log, trace files, passord files and Static PFILE.</p></div>
 <div class="paragraph"><p>ASM Mirroring defaults to a single mirror, but can be set to <tt>NONE</tt> or <tt>DOUBLE</tt>.</p></div>
 <div class="paragraph"><p>Stripping is automatic and cannot be disabled.</p></div>
-<div class="paragraph"><p>ASM is a management and control facility tat makes files available. It does not do the actual I/O work.</p></div>
+<div class="paragraph"><p>ASM is a management and control facility that makes files available. It does not do the actual I/O work.</p></div>
 <div class="paragraph"><p>An ASM instance cannot mount or open a database.</p></div>
 <div class="paragraph"><p>You can only connect to an ASM instance using a password file or OS authentication.</p></div>
 <div class="dlist"><dl>
@@ -1700,14 +1724,14 @@ the <tt>ASMB</tt> process creates a session against the ASM instance, continuous
 </li>
 </ul></div>
 <div class="paragraph"><p>If an ASM instance fails, the dependent RDBMS instances using it will abort.
-RMAN is the only too that can backup ASM files.</p></div>
+RMAN is the only tool that can backup ASM files.</p></div>
 <div class="paragraph"><p><u>Test:</u> 0 error (2013-04-03)</p></div>
 </div>
 <h2 id="_chapter_21_the_resource_manager">21. Chapter 21: The Resource Manager</h2>
 <div class="sectionbody">
 <div class="paragraph"><p><tt>RESOURCE_LIMITS</tt> parameter has nothing to do with the Resource Manager. It has to do with the PROFILES.</p></div>
 <div class="paragraph"><p>The <tt>RESOURCE_MANAGER_PLAN</tt> instance parameter (that defaults to DEFAULT_MAINTENANCE_PLAN) is the way to control Resource Manager. It can also be set using the scheduler or with the <tt>DBMS_RESOURCE_MANAGER.SWITCH_PLAN</tt> procedure.</p></div>
-<div class="paragraph"><p><tt>DBMS_RESOURCE_MANAGER_PRIVS</tt> package is used to put user into consumer groups and to grant system privileges necessary to administer the Resource Manager. The corresponding role (<tt>ADMINISTER RESOURCE MANAGER</tt>) cannot be granted or revoked other way than using this package.</p></div>
+<div class="paragraph"><p><tt>DBMS_RESOURCE_MANAGER_PRIVS</tt> package is used to put users into consumer groups and to grant system privileges necessary to administer the Resource Manager. The corresponding role (<tt>ADMINISTER RESOURCE MANAGER</tt>) cannot be granted or revoked other way than using this package.</p></div>
 <div class="paragraph"><p>Every user can switch its consumer group using the <tt>DBMS_SESSION.SWITCH_CURRENT_CONSUMER_GROUP</tt> procedure.</p></div>
 <div class="paragraph"><p>A user with rights to administer Resource Manager can use:</p></div>
 <div class="ulist"><ul>
@@ -1724,7 +1748,7 @@ RMAN is the only too that can backup ASM files.</p></div>
 </ul></div>
 <div class="paragraph"><p>There are 4 priority levels that can be used in a plan.</p></div>
 <div class="paragraph"><p>Memory allocated to Resource Manager is the Pending Area (part of the SGA). It is also used to validate a plan before saving it.</p></div>
-<div class="paragraph"><p>Every plan must include the <tt>OTHER_GROUP</tt> group; otherwise, the validation will fail in the pending area and the plan will not be savec in the data dictionnary.</p></div>
+<div class="paragraph"><p>Every plan must include the <tt>OTHER_GROUP</tt> group; otherwise, the validation will fail in the pending area and the plan will not be saved in the data dictionnary.</p></div>
 <div class="paragraph"><p>Active session in Resource Manager vocabulary includes running sessions and idle sessions with uncommited transaction(s).</p></div>
 <div class="paragraph"><p><u>Test:</u> 5 errors Q1,2,3,10,11 (2013-04-05)</p></div>
 </div>
@@ -1740,8 +1764,8 @@ Job Coordinator process. It monitors <tt>DBA_SCHEDULER_JOBS</tt> view and launch
 </p>
 </dd>
 </dl></div>
-<div class="paragraph"><p><tt>JOB_QUEUE_PROCESS</tt> instance parameter limits the max number (0 to 1000 and defaults to 1000) of Jnn that can be launched. If set to 0, the scheduler will not function.</p></div>
-<div class="paragraph"><p>By default jobs, programs are disabled in the scheduler at creation time.</p></div>
+<div class="paragraph"><p><tt>JOB_QUEUE_PROCESS</tt> instance parameter limits the max number (0 to 1000 and defaults to 1000) of Jnnn that can be launched. If set to 0, the scheduler will not function.</p></div>
+<div class="paragraph"><p>By default jobs and programs are disabled in the scheduler at creation time.</p></div>
 <div class="paragraph"><p>Job class is used to associate 1 or more job with a Resource Manager consumer group and also to control logging levels.</p></div>
 <div class="paragraph"><p>The <tt>MANAGE SCHEDULER</tt> system privilege is needed to create job classes and windows and to force windows to open or close irrespective of their schedules.</p></div>
 <div class="paragraph"><p>PROGRAMS and JOBS share the same namespace &#8658; They cannot have the same name! The same is true for SCHEDULES and WINDOWS.</p></div>
@@ -1876,7 +1900,7 @@ The <tt>DATAPUMP_DIR</tt> environment variable
 </li>
 <li>
 <p>
-The <tt>DATA _PUMP_DIR</tt> directory
+The <tt>DATA_PUMP_DIR</tt> directory
 </p>
 </li>
 </ol></div>
@@ -1897,11 +1921,11 @@ External table path: uses SELECT and INSERT statements using the buffer cache, U
 <h3 id="_transportable_tablespaces">23.4. Transportable tablespaces</h3><div style="clear:left"></div>
 <div class="paragraph"><p>Transportable tablespaces requires data to be converted to the endian format. To transport tablespace accross platforms with a different endian requires converting datafiles. You do this using the <tt>CONVERT</tt> RMAN command.</p></div>
 <h3 id="_tables_reorganization">23.5. Tables reorganization</h3><div style="clear:left"></div>
-<div class="paragraph"><p>`DBA_RESUMABLE`view lists all suspended sessions. Resumable can be set:</p></div>
+<div class="paragraph"><p><tt>DBA_RESUMABLE</tt> view lists all suspended sessions. Resumable can be set:</p></div>
 <div class="ulist"><ul>
 <li>
 <p>
-at session level using <tt>ALTER SESSION ENABLE RESULAMBLE [TIMEOUT &lt;seconds&gt;] [name &lt;operation_name&gt;];</tt>. TIMEOUT defauts to infinite; NAME is the name that would appear in DBA_RESUMABLE
+at session level using <tt>ALTER SESSION ENABLE RESUMABLE [TIMEOUT &lt;seconds&gt;] [name &lt;operation_name&gt;];</tt>. TIMEOUT defauts to infinite; NAME is the name that would appear in DBA_RESUMABLE
 </p>
 </li>
 <li>
@@ -1913,7 +1937,7 @@ at system level by setting the <tt>RESUMABLE_TIMEOUT</tt> instance parameter
 <div class="paragraph"><p>Row migration is caused by UPDATE statement. INSERT or DELETE can NEVER cause row migration.</p></div>
 <div class="paragraph"><p>Reorganizing a table with a MOVE will render all associated indexes unusable.</p></div>
 <div class="paragraph"><p>A MOVE operation will lock the table against DML. You cannot move a table if there is an uncommited transaction against it.</p></div>
-<div class="paragraph"><p>To find chained rows, use the <tt>ANALYZE</tt> command, <strong>NOT</strong> <tt>DBMS_STATS</tt> package. Then go to the <tt>CHAIN_CNT`of the `DBA_TABLES</tt>. IF the <tt>AVG_ROW_LEN</tt> is less than the block size, these are migrated rows; if it is greater, they will be chained rows.</p></div>
+<div class="paragraph"><p>To find chained rows, use the <tt>ANALYZE</tt> command, <strong>NOT</strong> <tt>DBMS_STATS</tt> package. Then go to the <tt>CHAIN_CNT</tt> of the <tt>DBA_TABLES</tt>. If the <tt>AVG_ROW_LEN</tt> is less than the block size, these are migrated rows; if it is greater, they will be chained rows.</p></div>
 <div class="paragraph"><p>Tables in tablespace that use the older freelist technique for managing segment space usage cannot be shrunk.</p></div>
 <div class="paragraph"><p>You CANNOT <tt>SHRINK</tt> a table that:</p></div>
 <div class="ulist"><ul>
@@ -1968,11 +1992,11 @@ Multipass: Both SORT and MERGE are separated into batches, sorted and written to
 </p>
 </li>
 </ul></div>
-<div class="paragraph"><p>The LOG_BUFFER is the only SGA structure that cannot be adjusted dynamically. If cannot therefore be automatically generated.</p></div>
+<div class="paragraph"><p>The LOG_BUFFER is the only SGA structure that cannot be adjusted dynamically. It cannot therefore be automatically generated.</p></div>
 <div class="paragraph"><p>If AMM (<tt>MEMORY_TARGET</tt>) is set and that you also set <tt>PGA_AGGREGATE_TARGET</tt> and <tt>SGA_TARGET</tt>, these will be considered as <strong>MINIMUM</strong>. AMM will never reduce PGA and SGA beneath those sizes.</p></div>
 <div class="paragraph"><p>Automatic memory management cannot function unless the <tt>statistics_level</tt> instance parameter is set to TYPICAL (which is the default) or ALL.</p></div>
 <div class="paragraph"><p>An invalid object may become valid on next access, but unusable indexes must be made valid by manual rebuild.</p></div>
-<div class="paragraph"><p>To launch SQL Tunning Advisor job manually, use DBMS_SQLTUNE.EXECUTE_TUNNING_TASK`.</p></div>
+<div class="paragraph"><p>To launch SQL Tunning Advisor job manually, use <tt>DBMS_SQLTUNE.EXECUTE_TUNNING_TASK</tt>.</p></div>
 <div class="paragraph"><p>SQL Access Advisor can recommend changes to Materialize views, changing indexes and partitionning, and enabling query rewrite. But only SQL Access Advisor recommends changes to Materialized views (including their creation).</p></div>
 <div class="paragraph"><p>When Automatic Memory Management is enabled, the individual advisors (which are necessary for AMM to function) can be seen in V$ views, but only the overall advisor is displayed by Database Control.</p></div>
 <div class="paragraph"><p><u>Test:</u> 5 errors Q4,12,14,16,18 (2013-04-08)</p></div>
@@ -2003,13 +2027,13 @@ Session: views are <tt>V$NLS_PARAMETERS</tt> and <tt>nls_session_parameters</tt>
 </li>
 <li>
 <p>
-Statements: for example, through functions like TO_CHAR(&lt;column&gt;, <em>Day dd, Month YYYY</em>, <em>NLS_DATE_LANGUAGE=DUTCH</em>)
+Statements: for example, through functions like <tt>TO_CHAR(&lt;column&gt;, 'Day dd, Month YYYY', 'NLS_DATE_LANGUAGE=DUTCH')</tt>
 </p>
 </li>
 </ul></div>
 <div class="paragraph"><p>Since release 9i, the National Character Set of the database can only be unicode (but the database characterset can be something else) &#8658; UTF8 (variable size) and AL16UTF16 (fixed-width).</p></div>
 <div class="paragraph"><p><tt>NLS_DATE_LANGUAGE</tt> and <tt>NLS_SORT</tt> are controlled by <tt>NLS_LANGUAGE</tt>.</p></div>
-<div class="paragraph"><p><tt>NLS_DATE_FORMAT`and `NLS_NUMERIC_CHARACTERS</tt> are controlled by <tt>NLS_TERRITORY</tt>.</p></div>
+<div class="paragraph"><p><tt>NLS_DATE_FORMAT</tt> and <tt>NLS_NUMERIC_CHARACTERS</tt> are controlled by <tt>NLS_TERRITORY</tt>.</p></div>
 <div class="paragraph"><p><tt>V$NLS_VALID_VALUES</tt> lists the supported values for the various NLS parameters.</p></div>
 <div class="paragraph"><p><u>Test:</u> 3 errors Q6,9,11 (2013-04-10)</p></div>
 </div>
@@ -2042,7 +2066,7 @@ ORACLE_HOME/log (if ORACLE_BASE environment variable is not set)
 <div id="footer">
 <div id="footer-text">
 Version 1.0.1<br />
-Last updated 2013-04-16 21:46:13 CEST
+Last updated 2013-04-30 19:57:54 CEST
 </div>
 </div>
 </body>
