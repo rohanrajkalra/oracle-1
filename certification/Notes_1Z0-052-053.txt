@@ -1,6 +1,6 @@
 Notes for exams 1Z0-052 & 1Z0-053 from the "All in One OCA-OCP" book
 ====================================================================
-Joseph HERLANT <josephherlant@free.fr>
+Joseph HERLANT
 v1.0.1, 2013-04-30: Minor corrections and addings
 :encoding: UTF-8
 :lang: en
@@ -63,6 +63,14 @@ Introduction
 Instance:: Memory structures and a set of processes. It exists on the CPU(s) and in the memory of a server node, and its existence is temporary. It manages all access to the database. Users of the database initiate sessions against the instance.
 Database:: a set of files on the disk. It exists until these files are deleted.
 
+If the query `select parallel from v$instance;` returns NO, this means the instance is not part of a RAC.
+
+If the query `select protection_level from v$database;` returns UNPROTECTED, it means that the instance is not part of a dataguard.
+
+If the query `select * from dba_streams_administrator;` returns no rows, it means Streams has not been configured.
+
+`v$sga_dynamic_components` wont' show the log buffer because this view show only components that can be dynamically resized.
+
 <<<
 
 Memory
@@ -114,7 +122,7 @@ Main background processes
 
 System Monitor (SMON):: mounts the database by locating and validating controlfiles. Then opens database by locating and validating datafiles and online log files. Once database opened, it does various tasks such as coalescing free space in datafiles.
 
-Process Monirot (PMON):: monitors server processes and detects any problem with the sessions. If a session has terminated abnormally, PMON will destroy the associated processes, return session's PGA to the server and rollback any uncommited transaction.
+Process Monitor (PMON):: monitors server processes and detects any problem with the sessions. If a session has terminated abnormally, PMON will destroy the associated processes, return session's PGA to the server and rollback any uncommited transaction.
 
 Database Writer (DBWn):: Writes dirty buffers from DB buffer cache to the datafiles (a session only modifies data in buffer cache, not directly on disks. Commit does not implies any write to disk!). It writes as little blocks as possible as rarely as possible. 4 events will force DBWn to write: No free buffers (neither dirty nor pinned - currently used by another session), too many dirty buffers (defined internally), a 3 second timeout (3 seconds without writing any buffers), and checkpoints (Full: manual, or on database closing ; partial (for just a tablespace or datafile): when datafile/tablespace are taken offline / backup mode / read only).
 
@@ -138,12 +146,12 @@ Other background processes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 CQJn,Jnnn:: Manage jobs scheduled. CQJn for the job queue and sending jobs to a job queue. Jnnn for execution of a job.
-Dnnn,Snnn:: Dnnn is the dispatcher process that will send SQL calls to shared server processes. Snnn is the same but when the shared server mechanism has been enabled.
 DBMR:: resource manager.
 DIA0:: diagnosability process zero is responsible for hang detection and deadlock resolution.
 DIAG:: for disagnostic dumps and executes oradebug commands.
 FBDA:: flashback data archiver process archives the historical rows of tracked tables into flashback data archives.
 PSPn:: Process spawner for creating and managing other Oracle processes.
+Dnnn,Snnn:: Dnnn is the dispatcher process that will send SQL calls to shared server processes. Snnn is the same but when the shared server mechanism has been enabled.
 QMNC,Qnnn:: Queue manager coordinator for monitoring queues in the database and assigning Qnnn processes to enqueue and dequeue messages to and from these queues.
 SHAD:: (="TNS V1-V3" on Linux systems) to support user sessions.
 SMCO,Wnnn:: for space management (allocation and space reclamation). Wnnn are slave processes of SMCO to implement the task.
@@ -157,6 +165,10 @@ Every database must have at least 2 groups of online logs, each containing at le
 
 
 %Test:% 1 error Q6 (2013-03-13)
+
+%Test:% 1 error Q6 (2013-05-01)
+
+%Test:% 0 error (2013-05-06)
 
 
 
@@ -184,8 +196,16 @@ CHARACTERSET of a database cannot be changed throug DBCA.
 
 Database control can be used for each database of a server and will use a different port for each one.
 
+If you use DBCA to create a database and DB Control is selected, a listener must be created first or DBCA will not continue.
+
+Only DBCA offers template management.
+
 
 %Test:% 6 errors Q1,7,10,15,19,20 (2013-03-14)
+
+%Test:% 6 errors Q3,7,10,13,18,19 (2013-05-02)
+
+%Test:% 0 error (2013-05-06)
 
 
 
@@ -214,7 +234,13 @@ The default scope of an ALTER SYSTEM is both memory and SPFILE!
 
 The SMON process will roll back incomplete transactions, after opening the database (that crashed for example). Rollback occurs while the database is available for use (after the users are able to connect).
 
+DB Control url will not get an error if database or listener is not running (since it can be used to start and stop both).
+
 %Test:% 5 errors Q1,6,8,10,12 (2013-03-15)
+
+%Test:% 4 errors Q1,2,8,10 (2013-05-03)
+
+%Test:% 1 error Q12 (2013-05-06)
 
 
 
@@ -281,6 +307,10 @@ To force a dedicated connection in a shared server environment (for admin tasks 
 
 %Test:% 4 errors Q4,6,7,10 (2013-03-18)
 
+%Test:% 2 errors Q4,8 (2013-05-04)
+
+%Test:% 1 errors Q6 (2013-05-06)
+
 
 
 Chapter 5: Oracle Storage
@@ -302,6 +332,9 @@ It is possible to convert tablespace from dictionnary extent management to local
 
 %Test:% 1 error Q4 (2013-03-20)
 
+%Test:% 3 errors Q5,11,16 (2013-05-04)
+
+%Test:% 1 error Q4 (2013-05-06)
 
 
 Chapter 6: Oracle Security
@@ -357,6 +390,7 @@ Roles can be password protected!
 
 %Test:% 4 errors Q5,7,10,14 (2013-03-22)
 
+%Test:% 2 errors Q6,8 (2013-05-06)
 
 
 Chapter 7: DDL and schema objects
@@ -380,7 +414,7 @@ For ISO/ANSI compliance, you can specify the VARCHAR datatype, but any column of
 
 A table can be organized in a way of:
 
- * a `heap table`: simplest, randomly organized
+ * a `heap table`: simplest, randomly organized, variable-length columns
  * an `index-organized table`: store rows in the order of an index key
  * an `index cluster`: can denormalize tables in parent-child relationship so that related rows from different tables are stored together
  * a `hash cluster`: force a random distribution rows to break ordering based on the entry sequence
@@ -426,6 +460,7 @@ Dropping a constraint that have an implicit index defined will also drop the ind
 
 %Test:% 2 errors Q17,20 (2013-03-24)
 
+%Test:% 4 errors Q2,4,13,20 (2013-05-07)
 
 
 Chapter 8: DML and concurrency
@@ -452,10 +487,11 @@ DML statement acquire at least 2 locks:
 
 To find out space needed for an undo tablespace, take the longest query and the retention guarantee and do the following operation:
 
-(_Number of blocks for the query_) */* *(* (_seconds of retention guarantee_) * (_Block size_) * (_Duration of the query (sec)_) *)*
+*(* max(_Number of blocks for the query_) */*  (_seconds of retention guarantee_)  *)* * (_Block size_) * max(_Duration of the query (sec)_)
 
 %Test:% 4 errors Q10,13,14,15 (2013-03-25)
 
+%Test:% 3 errors Q13,14,15 (2013-05-07)
 
 
 Chapter 9: Retrieving, restricting and sorting data using SQL
@@ -498,7 +534,6 @@ The result set of an inner query will be nested before the outer query can run.
 %Test:% 4 errors Q1,3,12,14 (2013-03-26)
 
 
-
 Chapter 14: Configuring the DB for Backup and recovery
 ------------------------------------------------------
 
@@ -527,6 +562,7 @@ An instance can have up to 8 multiplexed copies of a controlfile.
 
 %Test:% 3 errors Q1,3,6 (2013-03-28)
 
+%Test:% 0 error (2013-05-07)
 
 
 Chapter 15: Backup with RMAN
@@ -574,8 +610,15 @@ Default RMAN encryption requires a wallet and will be AES128. Alternatively, a p
 
 RMAN stores its repository on controlfile => loss of it means no restore possible! RMAN Recovery Catalog avoids this. 
 
+If you use LOG_ARCHIVE_DEST or LOG_ARCHIVE_DUPLEX_DEST, these locations must be disks (Filesystems or ASM). It cannot be another Oracle instance.
+
+If a MANDATORY archive destination is unavailable, the database will shut down.
+
+Control files and redo logs are considered as permanent. A copy of the controlfile and each online log is kept in the FRA. Archivelog and backups are considered as transient.
+
 %Test:% 3 errors Q2,5,10 (2013-03-31)
 
+%Test:% 1 error Q5 (2013-05-07)
 
 
 Chapter 16: Restore and recover with RMAN
@@ -634,6 +677,8 @@ To manually recover a block using RMAN, use the `block recover datafile <datafil
 If you use the backup with the MAXCORRUPT option, you can revover corrupted blocks using `block recover corruption list [until SYSDATE-7];`(for example). The "until sysdate - 7" would recover from a backup at least older than 7 days.
 
 %Test:% 4 errors Q1,6,9,15 (2013-03-31)
+
+%Test:% 4 error Q6,9,11,15 (2013-05-07)
 
 
 
@@ -950,6 +995,8 @@ MMON process is responsible of raising an alert when a tablespace usage treshold
 
 +++<u>Test:</u>+++ 2 errors Q8,9 (2013-04-06)
 
++++<u>Test:</u>+++ 3 errors Q3,6,8 (2013-05-07)
+
 
 
 Chapter 24: The AWR and the Alert System
@@ -974,6 +1021,8 @@ The space usage alert is intelligent enough to ignore dropped objects and to tak
 
 +++<u>Test:</u>+++ 1 error Q3 (2013-04-07)
 
++++<u>Test:</u>+++ 0 error (2013-05-07)
+
 
 
 Chapter 25: Performance Tunning
@@ -989,19 +1038,73 @@ The LOG_BUFFER is the only SGA structure that cannot be adjusted dynamically. It
 
 If AMM (`MEMORY_TARGET`) is set and that you also set `PGA_AGGREGATE_TARGET` and `SGA_TARGET`, these will be considered as *MINIMUM*. AMM will never reduce PGA and SGA beneath those sizes.
 
+When Automatic Memory Management is enabled, the individual advisors (which are necessary for AMM to function) can be seen in V$ views, but only the overall advisor is displayed by Database Control.
+
 Automatic memory management cannot function unless the `statistics_level` instance parameter is set to TYPICAL (which is the default) or ALL.
+
+Memory advisor views: `v$memory_target_advice`, `v$sga_target_advice` and `v$pga_target_advice`
 
 An invalid object may become valid on next access, but unusable indexes must be made valid by manual rebuild.
 
-To launch SQL Tunning Advisor job manually, use `DBMS_SQLTUNE.EXECUTE_TUNNING_TASK`.
+SQL Tuning Advisor
+~~~~~~~~~~~~~~~~~~
+
+Inputs of SQL Tuning Advisor are SQL statement(s) from:
+
+ * the library cache (in shared pool)
+ * a precreated set of SQL statements
+ * the AWR
+ * a manually given SQL statement
+
+SQL Tuning Advisor advises upon:
+
+ * statistics
+ * SQL profiles creation
+ * Indexes creation
+ * Materialized views creation (not modifications!)
+ * Partitionning
+ * revision of SQL statement
+
+
+Package to use the SQL Tuning Advisor: `DBMS_SQLTUNE`. To launch SQL Tuning Advisor job manually, use `DBMS_SQLTUNE.EXECUTE_TUNNING_TASK`.
+
+Views to use with the SQL Tuning Advisor: `DBA_ADVISOR_LOG`, `DBA_/USER_ADVISOR_TASKS` and `V$ADVISOR_PROGRESS`.
+
+
+SQL Access Advisor
+~~~~~~~~~~~~~~~~~~
+
+Inputs of SQL Access Advisor can be:
+
+ * A single SQL statement
+ * A SQL statement tuning set
+ * Current SQL cache contents
+ * A hypothetical workload imputed from the DDL of a set of objects
 
 SQL Access Advisor can recommend changes to Materialize views, changing indexes and partitionning, and enabling query rewrite. But only SQL Access Advisor recommends changes to Materialized views (including their creation).
 
-When Automatic Memory Management is enabled, the individual advisors (which are necessary for AMM to function) can be seen in V$ views, but only the overall advisor is displayed by Database Control.
+Package to use the SQL Access Advisor: `DBMS_ADVISOR`. To launch SQL Access Advisor job manually, use `DBMS_ADVISOR.QUICK_TUNE`.
+
+
+Database replay
+~~~~~~~~~~~~~~~
+Database Replay consists of four steps:
+ . workload capture
+ . workload preprocessing
+ . workload replay
+ . analysis and reporting
+
+Are *NOT* included in capture:
+ * SQL*Loader operations
+ * Oracle Streams
+ * flashback queries
+ * distributed transactions
+ * remote DESCRIBE or COMMIT commands
 
 
 +++<u>Test:</u>+++ 5 errors Q4,12,14,16,18 (2013-04-08)
 
++++<u>Test:</u>+++ 7 errors Q9,12,13,14,15,16,18 (2013-05-07)
 
 
 Chapter 26: Globalization
@@ -1036,9 +1139,15 @@ Chapter 27: The Intelligent Infrastructure
  * ORACLE_BASE/diag (if DIAGNOSTIC_DEST instance parameter is not set)
  * ORACLE_HOME/log (if ORACLE_BASE environment variable is not set)
 
-+++<u>Test:</u>+++ 3 errors Q,56,8 (2013-04-10)
++++<u>Test:</u>+++ 3 errors Q5,6,8 (2013-04-10)
+
++++<u>Test:</u>+++ 5 errors Q2,3,4,6,8 (2013-05-07)
 
 
+Training exams 1Z0-052:
 +++<u>Exam A:</u>+++ 68% (2013-04-10)
++++<u>Exam A:</u>+++ 79% (2013-05-05)
 +++<u>Exam B:</u>+++ 80% (2013-04-14)
++++<u>Exam B:</u>+++ 92% (2013-05-09)
+
 

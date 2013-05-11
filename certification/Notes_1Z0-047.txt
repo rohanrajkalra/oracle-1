@@ -1,6 +1,6 @@
 Notes for exam 1Z0-047
 ======================
-Joseph HERLANT <josephherlant@free.fr>
+Joseph HERLANT
 v1.0, 2013-02-16 : Creation of the document
 :encoding: UTF-8
 :data-uri:
