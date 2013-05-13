@@ -1,7 +1,7 @@
 Notes for exams 1Z0-052 & 1Z0-053 from the "All in One OCA-OCP" book
 ====================================================================
 Joseph HERLANT
-v1.0.1, 2013-04-30: Minor corrections and addings
+v1.0.3, 2013-05-13: Minor corrections and addings
 :encoding: UTF-8
 :lang: en
 :data-uri:
@@ -1133,11 +1133,18 @@ Since release 9i, the National Character Set of the database can only be unicode
 Chapter 27: The Intelligent Infrastructure
 ------------------------------------------
 
+The ADR is a central file-based repository for all diagnostic information. This includes various dumps and trace files, the alert log, and health monitor reports.
+
 `ADR_BASE` defaults to (in order of precedence):
 
  * DIAGNOSTIC_DEST/diag
  * ORACLE_BASE/diag (if DIAGNOSTIC_DEST instance parameter is not set)
  * ORACLE_HOME/log (if ORACLE_BASE environment variable is not set)
+
+A problem is a critical error in the database or the instance. An incident is an occurrence of a problem. An incident package is a collection of data regarding one or more incidents and problems, formatted for upload to Oracle Support Services as part of an SR.
+
+Before the REFRESHFROMMETALINK job can run, Database Control must be able to make an outbound HTTP connection to My Oracle Support website.
+
 
 +++<u>Test:</u>+++ 3 errors Q5,6,8 (2013-04-10)
 
