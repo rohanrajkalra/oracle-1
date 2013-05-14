@@ -1,7 +1,7 @@
 Notes for exams 1Z0-052 & 1Z0-053 from the "All in One OCA-OCP" book
 ====================================================================
 Joseph HERLANT
-v1.0.3, 2013-05-13: Minor corrections and addings
+v1.0.4, 2013-05-14: Minor addings
 :encoding: UTF-8
 :lang: en
 :data-uri:
@@ -544,6 +544,8 @@ At instance startup, the roll forward phase reconstructs UNDO segments in memory
 Instance recovery never needs an ARCHIVED redo log file.
 
 MTTR (-> Mean Time To Recover) can be controlled by the `FAST_START_MTTR_TARGET` (which defaults to 0, that means UNLIMITED). This initialization parameter makes the DWR work more harder to ensure that the time between the checkpoint time (in the redo) and the current time tend to be near the value of this particular parameter. This parameter also enables "checkpoint auto-tunning".
+
+When `FAST_START_MTTR_TARGET` is set to a nonzero value, it will override the `LOG_CHECKPOINT_INTERVAL`.
 
 MTTR Advisor can be seen through `V$INSTANCE_RECOVERY` view.
 
@@ -1144,6 +1146,8 @@ The ADR is a central file-based repository for all diagnostic information. This 
 A problem is a critical error in the database or the instance. An incident is an occurrence of a problem. An incident package is a collection of data regarding one or more incidents and problems, formatted for upload to Oracle Support Services as part of an SR.
 
 Before the REFRESHFROMMETALINK job can run, Database Control must be able to make an outbound HTTP connection to My Oracle Support website.
+
+Using the EM Workbench Support, you can create full or incremental packages, add or remove trace files to a package and add SQL test cases to the package.
 
 
 +++<u>Test:</u>+++ 3 errors Q5,6,8 (2013-04-10)
