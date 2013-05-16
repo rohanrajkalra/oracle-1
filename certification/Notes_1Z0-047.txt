@@ -136,4 +136,11 @@ ALL_* views list any type of objects in the database, regardless of owner, to wh
 
 To defer an constraint, it must have been created with the `DEFERRABLE` option. Then you defer it using `SET CONSTRAINT <constraint_name> DEFERRED;`
 
+NVL2 function syntax `NVL2('<column or expression to evaluate>', '<column or expression to return if NOT NULL>', '<column or expression to return if NULL>')`
+
+A coumpound query will, by default, return rows sorted accross all the columns, from the left to the right. The only exception is `UNION ALL` where the rows will not be sorted.
+
+The result set of an inner query will be nested before the outer query can run.
+
+
 
